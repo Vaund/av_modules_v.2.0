@@ -60,6 +60,7 @@ dict_data = {}
 
 auto_ = {}
 dict_admins = {}
+dict_forward = {}
 dict_admins[760148226] = {'user_name': 'UITAAP', 'rights': True}
 dict_admins[665909535] = {'user_name': 'lexan4ik', 'rights': True}
 dict_admins[657287224] = {"user_name": "Lesha", "rights": True}
@@ -119,3 +120,53 @@ key_mass.remove("ID")
 inline_markup3 = InlineKeyboardMarkup()
 for x in key_mass:
     inline_markup3.add(InlineKeyboardButton(x, callback_data="22" + x))
+
+#pablo
+
+
+inline_markup_main = InlineKeyboardMarkup()
+inline_btn_11 = InlineKeyboardButton('Изменить администратора', callback_data='b0')
+inline_btn_22 = InlineKeyboardButton('Удалить администратора', callback_data='c0')
+inline_markup_main.add(inline_btn_11)
+inline_markup_main.add(inline_btn_22)
+
+
+
+inline_markup_n_admin = InlineKeyboardMarkup()
+inline_btn_1 = InlineKeyboardButton('Администратор', callback_data='f0')
+inline_btn_2 = InlineKeyboardButton('Супер администратор', callback_data='g0')
+inline_markup_n_admin.add(inline_btn_1, inline_btn_2)
+
+
+
+inline_markup_avto = InlineKeyboardMarkup()
+inline_btn_add_car = InlineKeyboardButton('Добавить автомобиль', callback_data='h0')
+inline_btn_change_car = InlineKeyboardButton('Изменить автомобиль', callback_data='i0')
+inline_btn_del_car = InlineKeyboardButton('Удалить автомобиль', callback_data='u0')
+inline_markup_avto.add(inline_btn_add_car)
+inline_markup_avto.add(inline_btn_change_car)
+inline_markup_avto.add(inline_btn_del_car)
+
+
+
+inline_markup_del_admin = InlineKeyboardMarkup()
+inline_btn_del_admin = InlineKeyboardButton('Удалить', callback_data='j0')
+inline_btn_del_admin2 = InlineKeyboardButton('Отмена', callback_data='l0')
+inline_markup_del_admin.add(inline_btn_del_admin, inline_btn_del_admin2)
+
+
+
+inline_markup_change_ad = InlineKeyboardMarkup()
+inline_btn_change_ad1 = InlineKeyboardButton('Изменить', callback_data='o0')
+inline_btn_change_ad2 = InlineKeyboardButton('Отмена', callback_data='p0')
+inline_markup_change_ad.add(inline_btn_change_ad1, inline_btn_change_ad2)
+
+
+
+inline_markup_change_ad2 = InlineKeyboardMarkup()
+
+
+inline_markup_change_admin = InlineKeyboardMarkup()
+inline_btn_change_admin1 = InlineKeyboardButton('Изменить имя', callback_data='t0')
+inline_btn_change_admin2 = InlineKeyboardButton('Изменить права', callback_data='y0')
+inline_markup_change_admin.add(inline_btn_change_admin1, inline_btn_change_admin2)
