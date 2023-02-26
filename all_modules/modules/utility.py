@@ -5,6 +5,7 @@ import gspread
 
 import dotenv
 import os
+import json
 
 dotenv.load_dotenv(".env")
 bot = telebot.TeleBot(os.environ["TOKEN"])
@@ -56,14 +57,22 @@ buf_auto = []
 
 view_auto = {}
 unique_view = {}
-dict_data = {}
 
 auto_ = {}
+
 dict_admins = {}
 dict_forward = {}
+dict_data = {}
+dict_del ={}
+dict_admins[810809759] = {'user_name': 'pasha', 'rights': True}
 dict_admins[760148226] = {'user_name': 'UITAAP', 'rights': True}
 dict_admins[665909535] = {'user_name': 'lexan4ik', 'rights': True}
 dict_admins[657287224] = {"user_name": "Lesha", "rights": True}
+
+
+
+
+
 
 buf = dict.fromkeys(key_mass)
 
@@ -121,12 +130,13 @@ inline_markup3 = InlineKeyboardMarkup()
 for x in key_mass:
     inline_markup3.add(InlineKeyboardButton(x, callback_data="22" + x))
 
-#pablo
-
+#admins
 
 inline_markup_main = InlineKeyboardMarkup()
+inline_btn_33 = InlineKeyboardButton('Список администраторов', callback_data='c1')
 inline_btn_11 = InlineKeyboardButton('Изменить администратора', callback_data='b0')
 inline_btn_22 = InlineKeyboardButton('Удалить администратора', callback_data='c0')
+inline_markup_main.add(inline_btn_33)
 inline_markup_main.add(inline_btn_11)
 inline_markup_main.add(inline_btn_22)
 
@@ -162,11 +172,23 @@ inline_btn_change_ad2 = InlineKeyboardButton('Отмена', callback_data='p0')
 inline_markup_change_ad.add(inline_btn_change_ad1, inline_btn_change_ad2)
 
 
+inline_markup_delete_admin = InlineKeyboardMarkup()
+inline_btn_del_adminn = InlineKeyboardButton('Удалить', callback_data='n1')
+inline_markup_delete_admin.add(inline_btn_del_adminn)
 
-inline_markup_change_ad2 = InlineKeyboardMarkup()
 
 
 inline_markup_change_admin = InlineKeyboardMarkup()
 inline_btn_change_admin1 = InlineKeyboardButton('Изменить имя', callback_data='t0')
 inline_btn_change_admin2 = InlineKeyboardButton('Изменить права', callback_data='y0')
 inline_markup_change_admin.add(inline_btn_change_admin1, inline_btn_change_admin2)
+
+
+
+inline_markup_rights_admin = InlineKeyboardMarkup()
+inline_btn_right_admin1 = InlineKeyboardButton('Администратор', callback_data='t1')
+inline_btn_right_admin2 = InlineKeyboardButton('Супер администратор', callback_data='y1')
+inline_markup_rights_admin.add(inline_btn_right_admin1, inline_btn_right_admin2)
+
+
+

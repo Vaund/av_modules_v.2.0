@@ -62,7 +62,7 @@ def search(id_user, k_user, message_id=""):
 
         buf_var = sorted(list(set(buf_var)))
         for x in buf_var:
-            keyb.add(InlineKeyboardButton(x, callback_data=f"c1{ind}@{buf_var.index(x)}"))
+            keyb.add(InlineKeyboardButton(x, callback_data=f"cc{ind}@{buf_var.index(x)}"))
 
         dict_search_user[id_user]["m"] = buf_var
         if message_id == "":
@@ -76,7 +76,7 @@ def key_keyb(id_user, messsage_id=""):
     keyb = InlineKeyboardMarkup()
     for k1, v2 in dict_search_user[id_user]["dict"].items():
         if v2 == None:
-            keyb.add(InlineKeyboardButton(k1, callback_data=f"k1{k1}"))
+            keyb.add(InlineKeyboardButton(k1, callback_data=f"kk{k1}"))
     if messsage_id != "":
         bot.edit_message_text(chat_id=id_user, message_id=messsage_id, text="Выберите следующий критерий",
                               reply_markup=keyb)
@@ -99,7 +99,7 @@ def card(id_user, buf):
                 text += f'<a href="{b}">🆔 {id} 🆔</a>\n'
             if a == 'Картинка':
                 picture = b
-        keybb.add(InlineKeyboardButton('Подробнее', callback_data=f'n1{str(indx)}'))
+        keybb.add(InlineKeyboardButton('Подробнее', callback_data=f'nn{str(indx)}'))
         bot.send_photo(id_user, picture, caption=text, reply_markup=keybb, parse_mode='HTML')
 
 

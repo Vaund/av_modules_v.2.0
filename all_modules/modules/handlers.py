@@ -1,13 +1,15 @@
+import json
 import utility
 from utility import search_dict, dict_search_user, bot, \
     view_auto, inline_markup, keybb, \
     dict_create_car, buf, inline_markup2 \
     , markup123, dict_change_car, my_car, \
     dict_data, mass_search, inline_markup3,dict_admins,inline_markup_avto,inline_markup_change_ad\
-    , inline_markup_change_ad2,inline_markup_change_admin, \
-    inline_markup_del_admin,dict_forward
+    ,inline_markup_change_admin, \
+    inline_markup_del_admin,dict_forward,inline_markup_rights_admin,inline_markup_delete_admin,dict_del
 
-from pablo_functions import check_admin,keyb_change_ad,new_admin,del_admin
+
+from pablo_functions import check_admin,keyb_change_ad,new_admin,new_name_ad,keyb_del_ad
 from lexan_functions import key_keyb, search, try_out, card_desc
 from lexan_functions import unique_view
 from anna_functions import change_car, proverka_p, create_car
@@ -17,7 +19,6 @@ def admin_start(message):
     if message.text == '/admin_start':
         bot.send_message(message.chat.id, "Проверка на администратора...")
         check_admin(message)
-        keyb_change_ad()
 
     if message.text == '/new_admin':
         if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
@@ -40,7 +41,6 @@ def admin_start(message):
 
     if message.text == '/help':
         bot.send_message(message.chat.id, "Здесь должна быть помощь")
-
 
 
 # Хендлер отлова /start
@@ -122,17 +122,17 @@ def query_handler(call):
     data = call.data[2:]
     print(call.data)
     # lexan
-    if flag == "k1":
+    if flag == "kk":
         search(call.from_user.id, message_id=call.message.message_id, k_user=data)
 
-    if flag == 'c1':
+    if flag == 'cc':
         a, b = data.split("@")
 
         dict_search_user[call.from_user.id]["dict"][mass_search[int(a)]] = dict_search_user[call.from_user.id]["m"][
             int(b)]
         if try_out(call.from_user.id, call.message.message_id):
             key_keyb(call.from_user.id, messsage_id=call.message.message_id)
-    if flag == 'n1':
+    if flag == 'nn':
         card_desc(call.from_user.id, num=int(data), msg_id=call.message.message_id)
     ###anna
     if flag == "em":
@@ -151,52 +151,146 @@ def query_handler(call):
         print(dict_data)
         msg = bot.send_message(id, "Введите  " + data)
         bot.register_next_step_handler(msg, change_car)
-        #pablo
+    #pablo
+    if flag == 'c1':
+        for k, v in dict_admins.items():
+            bot.send_message(id, f"Имя пользователя: {v['user_name']} \nУровень прав: {v['rights']}")
+
+
     if flag == 'b0':
         bot.send_message(id, "Вы действительно хотите изменить администратора?", reply_markup=inline_markup_change_ad)
 
+
     if flag == 'o0':
-        bot.send_message(id, "Выберите администратора, которого хотите изменить", reply_markup=inline_markup_change_ad2)
+        bot.send_message(id, "Выберите администратора, которого хотите изменить", reply_markup=keyb_change_ad())
+
+
+
 
     if flag == 'o1':
+        dict_data[id] = data
+        print("dict_data", dict_data)
         # print(data)
-        for v in dict_admins.values():
-            bot.send_message(id, f"Имя пользователя: {v['user_name']} \nУровень прав: {v['rights']}",
-                             reply_markup=inline_markup_change_admin)
+        bot.send_message(id, f"Имя пользователя: {dict_admins[int(data)]['user_name']} \nУровень прав: "
+                             f"{dict_admins[int(data)]['rights']}", reply_markup=inline_markup_change_admin)
+
+
 
     if flag == 't0':
-        bot.send_message(id, "Укажите новое имя")
+        new_name = bot.send_message(id, "Укажите новое имя")
+        bot.register_next_step_handler(new_name, new_name_ad)
+        with open('dict_admins.json', 'w', encoding='utf-8') as f:
+            json.dump(dict_admins, f, ensure_ascii=False, indent=4)
+
+        f = open('dict_admins.json', 'r', encoding='utf-8')
+        d = json.loads(f.read())
+        f.close()
+        print(d)
+        print(dict_admins)
+
 
     if flag == 'y0':
-        bot.send_message(id, "Укажите права")
+        bot.send_message(id, "Укажите права", reply_markup=inline_markup_rights_admin)
+        with open('dict_admins.json', 'w', encoding='utf-8') as f:
+            json.dump(dict_admins, f, ensure_ascii=False, indent=4)
+
+        f = open('dict_admins.json', 'r', encoding='utf-8')
+        d = json.loads(f.read())
+        f.close()
+        print(d)
+
+    if flag == 't1':
+        dict_admins[int(dict_data[id])] = {'user_name': dict_admins[int(dict_data[id])]['user_name'], 'rights': 'False'}
+        bot.send_message(id, "Администратор добавлен")
+        with open('dict_admins.json', 'w', encoding='utf-8') as f:
+            json.dump(dict_admins, f, ensure_ascii=False, indent=4)
+
+        f = open('dict_admins.json', 'r', encoding='utf-8')
+        d = json.loads(f.read())
+        f.close()
+        print(d)
+        print(dict_admins)
+
+
+    if flag == 'y1':
+        dict_admins[int(dict_data[id])] = {'user_name': dict_admins[int(dict_data[id])]['user_name'], 'rights': 'True'}
+        bot.send_message(id, "Супер администратор добавлен")
+        with open('dict_admins.json', 'w', encoding='utf-8') as f:
+            json.dump(dict_admins, f, ensure_ascii=False, indent=4)
+
+        f = open('dict_admins.json', 'r', encoding='utf-8')
+        d = json.loads(f.read())
+        f.close()
+        print(d)
+        print(dict_admins)
+
 
     if flag == 'p0':
         bot.send_message(id, "Отмена изменения")
+
 
     if flag == 'c0':
         # bot.send_message(id, call.message.id)
         bot.send_message(id, "Вы действительно хотите удалить администратора?", reply_markup=inline_markup_del_admin)
 
+
     if flag == 'j0':
-        del_a = bot.send_message(id, "Перешлите сообщение администратора, которого хотите удалить")
-        bot.register_next_step_handler(del_a, del_admin)
+        bot.send_message(id, "Выберите администратора, которого хотите удалить", reply_markup=keyb_del_ad())
+
+
+    if flag == 'n0':
+        dict_del[id] = data
+        print(dict_del)
+        bot.send_message(id, f"Имя пользователя: {dict_admins[int(data)]['user_name']} \nУровень прав: "
+                             f"{dict_admins[int(data)]['rights']}", reply_markup=inline_markup_delete_admin)
+
+
+    if flag == 'n1':
+        dict_admins.pop(int(dict_del[id]))
+        bot.send_message(id, "Администратор удалён")
+        with open('dict_admins.json', 'w', encoding='utf-8') as f:
+            json.dump(dict_admins, f, ensure_ascii=False, indent=4)
+
+        f = open('dict_admins.json', 'r', encoding='utf-8')
+        d = json.loads(f.read())
+        f.close()
+        print(d)
+        print(dict_admins)
+
 
     if flag == 'l0':
         bot.send_message(id, "Отмена удаления")
+
 
     if flag == 'f0':
         for k, v in dict_forward.values():
             pass
         dict_admins[k] = {'user_name': v, 'rights': "False"}
         bot.send_message(id, "Администратор добавлен")
+        # print(dict_admins[forward_id])
+        # print(forward_id)
+        with open('dict_admins.json', 'w', encoding='utf-8') as f:
+            json.dump(dict_admins, f, ensure_ascii=False, indent=4)
 
+        f = open('dict_admins.json', 'r', encoding='utf-8')
+        d = json.loads(f.read())
+        f.close()
+        print(d)
         print(dict_admins)
         dict_forward.popitem()
+        # print(dict_forward)
 
     if flag == 'g0':
         for k, v in dict_forward.values():
             pass
         dict_admins[k] = {'user_name': v, 'rights': "True"}
         bot.send_message(id, "Супер администратор добавлен")
+        with open('dict_admins.json', 'w', encoding='utf-8') as f:
+            json.dump(dict_admins, f, ensure_ascii=False, indent=4)
+
+        f = open('dict_admins.json', 'r', encoding='utf-8')
+        d = json.loads(f.read())
+        f.close()
+        print(d)
         print(dict_admins)
         dict_forward.popitem()
