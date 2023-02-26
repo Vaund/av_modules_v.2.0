@@ -1,6 +1,5 @@
 from utility import auto_, dict_search_user, bot, InlineKeyboardMarkup, \
-    mass_search, InlineKeyboardButton, view_auto, unique_view
-from telebot import types
+    mass_search, InlineKeyboardButton, view_auto, unique_view,types
 
 
 # lexan
