@@ -1,9 +1,5 @@
-import time
-import telebot
-from telebot import types
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import json
-from utility import bot,dict_admins,inline_markup_n_admin,inline_markup_main,dict_data,dict_forward
+from utility import bot,dict_admins,inline_markup_n_admin,inline_markup_main,dict_data,dict_forward,InlineKeyboardMarkup, InlineKeyboardButton
 
 
 
