@@ -1,43 +1,23 @@
 import json
-import utility
 from utility import search_dict, dict_search_user, bot, \
     view_auto, inline_markup, keybb, \
     dict_create_car, buf, inline_markup2 \
     , markup123, dict_change_car, my_car, \
     dict_data, mass_search, inline_markup3,dict_admins,inline_markup_avto,inline_markup_change_ad\
     ,inline_markup_change_admin, \
-    inline_markup_del_admin,dict_forward,inline_markup_rights_admin,inline_markup_delete_admin,dict_del
+    inline_markup_del_admin,dict_forward,inline_markup_rights_admin,inline_markup_delete_admin,dict_del,picture_mass
 
-
+import anna_functions
+from anna_functions import change_car, proverka_p,create_car
 from pablo_functions import check_admin,keyb_change_ad,new_admin,new_name_ad,keyb_del_ad
 from lexan_functions import key_keyb, search, try_out, card_desc
 from lexan_functions import unique_view
-from anna_functions import change_car, proverka_p, create_car
 
 @bot.message_handler(commands=['admin_start','new_admin','stat','new_car','help',''])
 def admin_start(message):
     if message.text == '/admin_start':
         bot.send_message(message.chat.id, "Проверка на администратора...")
         check_admin(message)
-
-    if message.text == '/new_admin':
-        if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
-            bot.send_message(message.chat.id, "Перешлите сообщение и укажите уровень прав нового администратора")
-        else:
-            bot.send_message(message.chat.id, "Отказано в доступе")
-    new_admin(message)
-
-    if message.text == '/stat':
-        if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
-            bot.send_message(message.chat.id, "Вот вся статистика")
-        else:
-            bot.send_message(message.chat.id, "Отказано в доступе")
-
-    if message.text == '/new_car':
-        if message.chat.id in dict_admins:
-            bot.send_message(message.chat.id, "Выберите действие с автомобилем", reply_markup=inline_markup_avto)
-        else:
-            bot.send_message(message.chat.id, "Отказано в доступе")
 
     if message.text == '/help':
         bot.send_message(message.chat.id, "Здесь должна быть помощь")
@@ -52,11 +32,27 @@ def start(message=''):
         key_keyb(message.from_user.id)
         print(dict_search_user)
 
-
-# lexan
+#anna
+@bot.message_handler(content_types=['photo'])
+def photo(message,flag=''):
+    if flag == 'picture':
+        picture_mass.append(message.photo[-1].file_id)
+        return message.photo[-1].file_id
+    for i in range(0,3):
+        try:
+            picture = message.photo[-1].file_id
+            picture_mass.append(picture)
+        except:
+            print('ppp')
+    try:
+        picture = list(set(picture_mass))
+        dict_create_car[message.from_user.id]['Массив картинок'] = picture
+        print(dict_create_car)
+    except:
+        print('user id не привязан к словарю')
 @bot.message_handler(commands=['u_stats'])
 def u_stats(message):
-    if message.text == '/u_stats':
+    if message.text == '/u_stats' and message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
         for i in unique_view:
             flag = False
             text = f'Топ просмотров: '
@@ -78,12 +74,12 @@ def u_stats(message):
                 bot.send_message(message.chat.id, text, parse_mode='HTML')
             else:
                 bot.send_message(message.chat.id, text_u, parse_mode='HTML')
-
-
+    else:
+        bot.send_message(message.chat.id,'Пшол вон')
 # lexan
-@bot.message_handler(commands=['stats'])
+@bot.message_handler(commands=['stats','u_stats'])
 def stats(message):
-    if message.text == '/stats':
+    if message.text == '/stats' and message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
         text = ''
         for i in view_auto.keys():
             for a, b in view_auto[i].items():
@@ -93,6 +89,9 @@ def stats(message):
                 if a == 'Ссылка':
                     text += f'<a href="{b}">🆔 {i} 🆔</a>, {text_v}: {view_a}\n'
         bot.send_message(message.chat.id, f'Статистика просмотров:\n{text}', parse_mode='HTML')
+    else:
+        bot.send_message(message.chat.id,'Пшол вон')
+
 
 
 # anna
@@ -200,7 +199,7 @@ def query_handler(call):
         print(d)
 
     if flag == 't1':
-        dict_admins[int(dict_data[id])] = {'user_name': dict_admins[int(dict_data[id])]['user_name'], 'rights': 'False'}
+        dict_admins[int(dict_data[id])] = {'user_name': dict_admins[int(dict_data[id])]['user_name'], 'rights': False}
         bot.send_message(id, "Администратор добавлен")
         with open('dict_admins.json', 'w', encoding='utf-8') as f:
             json.dump(dict_admins, f, ensure_ascii=False, indent=4)
@@ -213,7 +212,7 @@ def query_handler(call):
 
 
     if flag == 'y1':
-        dict_admins[int(dict_data[id])] = {'user_name': dict_admins[int(dict_data[id])]['user_name'], 'rights': 'True'}
+        dict_admins[int(dict_data[id])] = {'user_name': dict_admins[int(dict_data[id])]['user_name'], 'rights': True}
         bot.send_message(id, "Супер администратор добавлен")
         with open('dict_admins.json', 'w', encoding='utf-8') as f:
             json.dump(dict_admins, f, ensure_ascii=False, indent=4)
@@ -265,7 +264,7 @@ def query_handler(call):
     if flag == 'f0':
         for k, v in dict_forward.values():
             pass
-        dict_admins[k] = {'user_name': v, 'rights': "False"}
+        dict_admins[k] = {'user_name': v, 'rights': False}
         bot.send_message(id, "Администратор добавлен")
         # print(dict_admins[forward_id])
         # print(forward_id)
@@ -283,7 +282,7 @@ def query_handler(call):
     if flag == 'g0':
         for k, v in dict_forward.values():
             pass
-        dict_admins[k] = {'user_name': v, 'rights': "True"}
+        dict_admins[k] = {'user_name': v, 'rights': True}
         bot.send_message(id, "Супер администратор добавлен")
         with open('dict_admins.json', 'w', encoding='utf-8') as f:
             json.dump(dict_admins, f, ensure_ascii=False, indent=4)
