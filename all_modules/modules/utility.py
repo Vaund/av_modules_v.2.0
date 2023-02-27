@@ -2,7 +2,6 @@ import telebot
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import gspread
-
 import dotenv
 import os
 import json
@@ -73,12 +72,15 @@ dict_admins[657287224] = {"user_name": "Lesha", "rights": True}
 
 
 
-
+#Anna
 buf = dict.fromkeys(key_mass)
 
 dict_create_car = {}
 
 dict_change_car = {}
+
+picture_mass = []
+
 
 for el in list_of_lists[1:]:
     auto_[el[13]] = {}
