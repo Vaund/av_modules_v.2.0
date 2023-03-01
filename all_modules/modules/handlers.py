@@ -38,21 +38,22 @@ def photo(message,flag=''):
     if flag == 'picture':
         picture_mass.append(message.photo[-1].file_id)
         return message.photo[-1].file_id
-    for i in range(0,3):
-        try:
-            picture = message.photo[-1].file_id
-            picture_mass.append(picture)
-        except:
-            print('ppp')
     try:
-        picture = list(set(picture_mass))
-        dict_create_car[message.from_user.id]['Массив картинок'] = picture
+        picture = message.photo[-1].file_id
+        picture_mass.append(picture)
+    except:
+        print('ppp')
+    try:
+        dict_create_car[message.from_user.id]['Массив картинок'] = picture_mass[1:]
         print(dict_create_car)
     except:
         print('user id не привязан к словарю')
+    bot.delete_message(message.from_user.id, message.id)
+
+
 @bot.message_handler(commands=['u_stats'])
 def u_stats(message):
-    if message.text == '/u_stats' and message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
+    if message.text == '/u_stats' and message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] is True:
         for i in unique_view:
             flag = False
             text = f'Топ просмотров: '
@@ -79,7 +80,7 @@ def u_stats(message):
 # lexan
 @bot.message_handler(commands=['stats','u_stats'])
 def stats(message):
-    if message.text == '/stats' and message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
+    if message.text == '/stats' and message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] is True:
         text = ''
         for i in view_auto.keys():
             for a, b in view_auto[i].items():
@@ -205,7 +206,7 @@ def query_handler(call):
 
     if flag == 't1':
         dict_admins[int(dict_data[id])] = {'user_name': dict_admins[int(dict_data[id])]['user_name'], 'rights': False}
-        bot.edit_message_text("Администратор добавлен", chat_id=id, message_id=call.message.message_id)
+        bot.edit_message_text("Администратор изменен", chat_id=id, message_id=call.message.message_id)
         with open('dict_admins.json', 'w', encoding='utf-8') as f:
             json.dump(dict_admins, f, ensure_ascii=False, indent=4)
 
@@ -218,7 +219,7 @@ def query_handler(call):
 
     if flag == 'y1':
         dict_admins[int(dict_data[id])] = {'user_name': dict_admins[int(dict_data[id])]['user_name'], 'rights': True}
-        bot.edit_message_text("Супер администратор добавлен", chat_id=id, message_id=call.message.message_id)
+        bot.edit_message_text("Администратор изменен", chat_id=id, message_id=call.message.message_id)
         with open('dict_admins.json', 'w', encoding='utf-8') as f:
             json.dump(dict_admins, f, ensure_ascii=False, indent=4)
 
@@ -273,7 +274,7 @@ def query_handler(call):
         for k, v in dict_forward.values():
             pass
         dict_admins[k] = {'user_name': v, 'rights': False}
-        bot.send_message(id, "Администратор добавлен")
+        bot.send_message(id, "")
         # print(dict_admins[forward_id])
         # print(forward_id)
         with open('dict_admins.json', 'w', encoding='utf-8') as f:
