@@ -25,7 +25,7 @@ def keyb_del_ad():
 
 # добваление администаторов
 def new_admin(message):
-    if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
+    if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] is True:
         try:
             forward_id = message.forward_from.id
 
@@ -44,13 +44,13 @@ def new_admin(message):
 # проверка на админа
 def check_admin(message):
     try:
-        if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == True:
+        if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] is True:
             bot.send_message(message.chat.id, "Вы супер администратор", reply_markup=inline_markup_main)
     except:
         pass
 
     try:
-        if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] == False:
+        if message.chat.id in dict_admins and dict_admins[message.chat.id]['rights'] is False:
             bot.send_message(message.chat.id, "Вы администратор")
     except:
         pass
